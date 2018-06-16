@@ -9,13 +9,12 @@ We'll start with the basic usage given at http://cli.exercism.io/usage/.
 
 Exercises are downloaded for a track with the 'fetch' command, 
 replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
-COMMANDLINE:
+
 ```
 $ exercism --verbose fetch $TRACK_ID
 $ exercism --verbose fetch go
 ``` 
 
-REQUEST:
 ```
 Request GET http://x.exercism.io/v2/exercises/go?key=c0dad43dc5e049319dde74842e39f004
 Response StatusCode=200
@@ -41,7 +40,7 @@ Now there is a new directory ".../go/gigasecond" holding the four files and cont
 where "gigasecond" happens to be the first item on the list of exercises at http://exercism.io/languages/go/exercises. 
 
 A specific exercise can be downloaded by specifying the exercise slug, for example *hello-world* or *food-chain*.
-COMMANDLINE:
+
 ```
 $ exercism --verbose fetch $TRACK_ID $EXERCISE_SLUG
 $ exercism --verbose fetch go hello-world 
