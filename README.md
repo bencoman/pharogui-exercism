@@ -5,7 +5,7 @@ The first job is to work our what its service API looks like.
 Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show requests and responses. 
 We'll start with the basic usage given at http://cli.exercism.io/usage/.
 
-## Downloading exercises
+## fetch
 
 Exercises are downloaded for a track with the 'fetch' command, 
 replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
