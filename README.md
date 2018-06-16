@@ -1,16 +1,15 @@
 # pharogui-exercism
 Investigating the feasibility of a GUI interface with Pharo to Exercism.
+
 The first job is to work our what its service API looks like.
-This is done by running Wireshark while running the commandline tool, 
-following the examples given at http://cli.exercism.io/usage/
+Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show requests and responses. 
+We'll start with the basic usage given at http://cli.exercism.io/usage/.
 
-## Basic Usage
+## Downloading exercises
 
-### Downloading exercises
-
-You download exercises for a track with the 'fetch' command, 
+Exercises are downloaded for a track with the 'fetch' command, 
 replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
-
+COMMANDLINE:
 ```
 $ exercism fetch $TRACK_ID
 $ exercism fetch go
@@ -54,10 +53,11 @@ Via: 1.1 vegur
 }
 ```
 
-Now there is a new directory ".../Go/gigasecond" holding the four files and contents shown above,
-where "gigasecond" happends to be the first item on the list of exercises at http://exercism.io/languages/go/exercises. 
+Now there is a new directory ".../go/gigasecond" holding the four files and contents shown above,
+where "gigasecond" happens to be the first item on the list of exercises at http://exercism.io/languages/go/exercises. 
 
-A specific exercise can be downloaded by specifying the exercise slug for example *hello-world* or *food-chain*.
+A specific exercise can be downloaded by specifying the exercise slug, for example *hello-world* or *food-chain*.
+COMMANDLINE:
 ```
 $ exercism fetch $TRACK_ID $EXERCISE_SLUG
 $ exercism fetch go hello-world 
@@ -99,3 +99,4 @@ Via: 1.1 vegur
     }]
 }
 ```
+Now there is a new directory ".../go/hello-world" holding the three files and contents shown above.
