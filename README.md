@@ -11,31 +11,15 @@ Exercises are downloaded for a track with the 'fetch' command,
 replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
 COMMANDLINE:
 ```
-$ exercism fetch $TRACK_ID
-$ exercism fetch go
+$ exercism --verbose fetch $TRACK_ID
+$ exercism --verbose fetch go
 ``` 
 
 REQUEST:
-```http
-GET /v2/exercises/go?key=c0da...api-key...bc04 HTTP/1.1
-Host: x.exercism.io
-User-Agent: github.com/exercism/cli v2.4.1 (windows/amd64)
-Content-Type: application/json
-Accept-Encoding: gzip
 ```
-
-RESPONSE:
-```http
-HTTP/1.1 200 OK
-Server: Cowboy
-Date: Sat, 16 Jun 2018 11:52:27 GMT
-Connection: keep-alive
-Content-Type: application/json;charset=utf-8
-X-Content-Type-Options: nosniff
-Content-Length: 4331
-Via: 1.1 vegur
-```
-```json
+Request GET http://x.exercism.io/v2/exercises/go?key=c0dad43dc5e049319dde74842e39f004
+Response StatusCode=200
+Response Body
 {   "problems": [{
         "id": "go/gigasecond",
         "track_id": "go",
@@ -59,31 +43,14 @@ where "gigasecond" happens to be the first item on the list of exercises at http
 A specific exercise can be downloaded by specifying the exercise slug, for example *hello-world* or *food-chain*.
 COMMANDLINE:
 ```
-$ exercism fetch $TRACK_ID $EXERCISE_SLUG
-$ exercism fetch go hello-world 
+$ exercism --verbose fetch $TRACK_ID $EXERCISE_SLUG
+$ exercism --verbose fetch go hello-world 
 ```
 
-REQUEST:
-```http
-GET /v2/exercises/go/hello-world?key=c0da...api-key...bc04 HTTP/1.1
-Host: x.exercism.io
-User-Agent: github.com/exercism/cli v2.4.1 (windows/amd64)
-Content-Type: application/json
-Accept-Encoding: gzip
 ```
-
-RESPONSE:
-```http
-HTTP/1.1 200 OK
-Server: Cowboy
-Date: Sat, 16 Jun 2018 09:39:17 GMT
-Connection: keep-alive
-Content-Type: application/json;charset=utf-8
-X-Content-Type-Options: nosniff
-Content-Length: 3631
-Via: 1.1 vegur
-```
-```json
+Request GET http://x.exercism.io/v2/exercises/go/hello-world?key=c0dad43dc5e049319dde74842e39f004
+Response StatusCode=200
+Response Body
 {   "problems": [{
         "id": "go/hello-world",
         "track_id": "go",
