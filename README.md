@@ -1,15 +1,15 @@
 # pharogui-exercism
-Investigating the feasibility of a GUI interface with Pharo to Exercism
-First job is to work our what its service API looks like.
-This is done by running Wireshark while running the commandline tool.
-Following the examples given at http://cli.exercism.io/usage/
+Investigating the feasibility of a GUI interface with Pharo to Exercism.
+The first job is to work our what its service API looks like.
+This is done by running Wireshark while running the commandline tool, 
+following the examples given at http://cli.exercism.io/usage/
 
 ## Basic Usage
 
 ### Downloading exercises
 
-You download exercises for a track with the fetch command:
-Replace $TRACK_ID with the ID of the track you are working on, e.g. go, python or haskell:
+You download exercises for a track with the 'fetch' command, 
+replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
 
 ```
 $ exercism fetch $TRACK_ID
