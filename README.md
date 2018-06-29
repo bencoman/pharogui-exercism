@@ -14,7 +14,7 @@ replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/
 $ exercism --verbose fetch $TRACK_ID
 $ exercism --verbose fetch go
 ``` 
-
+on the wire looks like...
 ```
 Request GET http://x.exercism.io/v2/exercises/go?key=c0dad43dc5e049319dde74842e39f004
 Response StatusCode=200
@@ -45,7 +45,7 @@ A specific exercise can be downloaded by specifying the exercise slug, for examp
 $ exercism --verbose fetch $TRACK_ID $EXERCISE_SLUG
 $ exercism --verbose fetch go hello-world 
 ```
-
+on the wire looks like...
 ```
 Request GET http://x.exercism.io/v2/exercises/go/hello-world?key=c0dad43dc5e049319dde74842e39f004
 Response StatusCode=200
