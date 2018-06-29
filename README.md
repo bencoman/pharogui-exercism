@@ -2,7 +2,7 @@
 Investigating the feasibility of a GUI interface with Pharo to Exercism.
 
 The first job is to work our what its service API looks like.
-Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show requests and responses. 
+Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show the wire operation of requests and responses. 
 We'll start with the basic usage given at http://cli.exercism.io/usage/.
 
 ## fetch
