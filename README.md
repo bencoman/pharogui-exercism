@@ -70,3 +70,5 @@ Now there is a new directory ".../go/hello-world" holding the three files and co
 So one approach would be using NeoJSON to parse the response body to get a Tonel file as a string,
 and parse that to create the package, classes and methods. Some discussion here...
 http://forum.world.st/Tonel-Fileout-tt5079805.html
+
+Actually I think here we dont need support for a package-per-tonel file.  The "slug" or "name" fields could provide the package name, with a tonel file per class - which presumably may provide better conformance to expectations of Execism web UI has for  other languages, than putting everything in a single file.
