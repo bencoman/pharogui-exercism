@@ -172,22 +172,24 @@ and now there is a new directory "C:\Users\...\Exercism\go\hello-world" holding 
 It seems the V2 website has moved from a single request/response for all exercise files (see README-old-v2) 
 to a separate request per file, and also the API key has moved from the query string to a header. 
 
-So try in Pharo Playground...
+## So try in Pharo Playground...
+In Pharo 6, first install NeoJSON: Tools > Catalog Browser...  NeoJSON > Install stable version.  
+Then in Playground...
 ```
 apiKey:=YOUR_TOKEN.
 exerciseId:='hello-world'.
 trackId:='go'.
-ZnClient new 
+client := ZnClient new 
   http;
   host: 'api.exercism.io';
   path: '/v1/solutions/latest';
   headerAt: 'Authorization' put: 'Bearer ' , apiKey;
   queryAt: 'exercise_id' put: exerciseId;
-  queryAt: 'track_id' put: trackId;
-  get.
+  queryAt: 'track_id' put: trackId.
+(response := client get) inspect.
 
-InspectIt==>
-{
+==>String...
+'{
   "solution": {
     "id": "5965748a44ee4ffdb66adce1fe17cd1e",
     "url": "https://exercism.io/my/solutions/5965748a44ee4ffdb66adce1fe17cd1e",
@@ -213,8 +215,15 @@ InspectIt==>
     ],
     "iteration": null
   }
-}
+}'
 ```
+More advanced NeoJSON can parse that directly into instance variables,
+but quick and simple, parse that into a Dictionary...
+```
+solution := NeoJSONReader fromString: response.
+solution inspect.
+```
+
 
 
 So one approach would be using NeoJSON to parse the response body to get a Tonel file as a string,
@@ -223,7 +232,4 @@ http://forum.world.st/Tonel-Fileout-tt5079805.html
 
 Actually I think here we dont need support for a package-per-tonel file.  The "slug" or "name" fields could provide the package name, with a tonel file per class - which presumably may provide better conformance to expectations of Execism web UI has for  other languages, than putting everything in a single file.
 
-## Testing
-In Pharo 6...
-1. Tools > Catalog Browser...  NeoJSON > Install stable version.
-1. 
+ 
