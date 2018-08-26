@@ -218,15 +218,21 @@ client := ZnClient new
 }'
 ```
 More advanced NeoJSON can parse that directly into instance variables,
-but quick and simple, parse that into a Dictionary...
+but quickly parsing that JSON into a Dictionary can be done like this...
 ```
-solution := NeoJSONReader fromString: response.
+solution := (NeoJSONReader fromString: response) at: 'solution'.
 solution inspect.
 ```
+Then we can download the files...
+```
+files := Dictionary new.
+(solution at: 'files') do: [ :filename |
+	client path: (solution at: 'file_download_base_url') , filename.
+	files at: filename put: client get ].
+files inspect.
+```
 
-
-
-So one approach would be using NeoJSON to parse the response body to get a Tonel file as a string,
+So that demonstrates using NeoJSON to parse the response body to get a Tonel file as a string.
 and parse that to create the package, classes and methods. Some discussion here...
 http://forum.world.st/Tonel-Fileout-tt5079805.html
 
