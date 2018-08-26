@@ -1,6 +1,6 @@
 # pharogui-exercism
 Investigating the feasibility of a GUI interface with Pharo to Exercism.
-(Updated for Exercism V2 website (note, the corresponding CLI tool seems to be V3)
+(Updated for Exercism V2 website (note, the corresponding CLI tool seems to be V3, andn the API seems to have reverted to V1)
 
 The first job is to work our what its service API looks like.
 Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show the wire operation of requests and responses. 
@@ -169,7 +169,7 @@ X-Xss-Protection: 1; mode=block
 ```
 and now there is a new directory "C:\Users\...\Exercism\go\hello-world" holding four files.
 
-It seems the v3 site has moved from a single request/response for all exercise files (see README-old-v2) 
+It seems the V2 website has moved from a single request/response for all exercise files (see README-old-v2) 
 to a separate request per file, and also the API key has moved from the query string to a header. 
 
 So try in Pharo Playground...
