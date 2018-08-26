@@ -1,74 +1,229 @@
 # pharogui-exercism
 Investigating the feasibility of a GUI interface with Pharo to Exercism.
+(Updated for Exercism V2 website (note, the corresponding CLI tool seems to be V3)
 
 The first job is to work our what its service API looks like.
 Exercism makes this easy with its commandline tool providing a very useful '--verbose' flag to show the wire operation of requests and responses. 
 We'll start with the basic usage given at http://cli.exercism.io/usage/.
 
-## fetch
+## configure
+Get your API key YOUR_TOKEN here...
+https://exercism.io/my/settings
 
-Exercises are downloaded for a track with the 'fetch' command, 
-replacing $TRACK_ID with the ID of the track you are working on, e.g. go/python/haskell:
+Configure api key
+```
+$ exercism version
+exercism version 3.0.8
+
+$ exercism configure --token=YOUR_TOKEN
+```
+
+## download
+
+Exercises are downloaded for a track with the 'download' command, e.g...
 
 ```
-$ exercism --verbose fetch $TRACK_ID
-$ exercism --verbose fetch go
+$ exercism --verbose download --track=go --exercise=hello-world
 ``` 
-on the wire looks like...
+the output of which is... 
 ```
-Request GET http://x.exercism.io/v2/exercises/go?key=c0dad43dc5e049319dde74842e39f004
-Response StatusCode=200
-Response Body
-{   "problems": [{
-        "id": "go/gigasecond",
-        "track_id": "go",
-        "language": "go",
-        "slug": "gigasecond",
-        "name": "Gigasecond",
-        "files": {
-            "README.md": "# Gigasecond\n\nCalculate the moment when someone has lived for 10^9 seconds.\n\nA gigasecond is 10^9 (1,000,000,000) seconds.\n\n## Running the tests\n\nTo run the tests run the command `go test` from within the exercise directory.\n\nIf the test suite contains benchmarks, you can run these with the `-bench`\nflag:\n\n    go test -bench .\n\nKeep in mind that each reviewer will run benchmarks on a different machine, with\ndifferent specs, so the results from these benchmark tests may vary.\n\n## Further information\n\nFor more detailed information about the Go track, including how to get help if\nyou're having trouble, please visit the exercism.io [Go language page](http://exercism.io/languages/go/about).\n\n## Source\n\nChapter 9 in Chris Pine's online Learn to Program tutorial. [http://pine.fm/LearnToProgram/?Chapter=09](http://pine.fm/LearnToProgram/?Chapter=09)\n\n## Submitting Incomplete Solutions\nIt's possible to submit an incomplete solution so you can see how others have completed the exercise.\n",
-            "cases_test.go": "package gigasecond\n\n// Source: exercism/problem-specifications\n// Commit: 5506bac gigasecond: Apply new \"input\" policy\n// Problem Specifications Version: 1.1.0\n\n// Add one gigasecond to the input.\nvar addCases = []struct {\n\tdescription string\n\tin          string\n\twant        string\n}{\n\t{\n\t\t\"date only specification of time\",\n\t\t\"2011-04-25\",\n\t\t\"2043-01-01T01:46:40\",\n\t},\n\t{\n\t\t\"second test for date only specification of time\",\n\t\t\"1977-06-13\",\n\t\t\"2009-02-19T01:46:40\",\n\t},\n\t{\n\t\t\"third test for date only specification of time\",\n\t\t\"1959-07-19\",\n\t\t\"1991-03-27T01:46:40\",\n\t},\n\t{\n\t\t\"full time specified\",\n\t\t\"2015-01-24T22:00:00\",\n\t\t\"2046-10-02T23:46:40\",\n\t},\n\t{\n\t\t\"full time with day roll-over\",\n\t\t\"2015-01-24T23:59:59\",\n\t\t\"2046-10-03T01:46:39\",\n\t},\n}\n",
-            "gigasecond.go": "// This is a \"stub\" file.  It's a little start on your solution.\n// It's not a complete solution though; you have to write some code.\n\n// Package gigasecond should have a package comment that summarizes what it's about.\n// https://golang.org/doc/effective_go.html#commentary\npackage gigasecond\n\n// import path for the time package from the standard library\nimport \"time\"\n\n// AddGigasecond should have a comment documenting it.\nfunc AddGigasecond(t time.Time) time.Time {\n\t// Write some code here to pass the test suite.\n\t// Then remove all the stock comments.\n\t// They're here to help you get started but they only clutter a finished solution.\n\t// If you leave them in, reviewers may protest!\n\treturn t\n}\n",
-            "gigasecond_test.go": "package gigasecond\n\n// Write a function AddGigasecond that works with time.Time.\n\nimport (\n\t\"os\"\n\t\"testing\"\n\t\"time\"\n)\n\n// date formats used in test data\nconst (\n\tfmtD  = \"2006-01-02\"\n\tfmtDT = \"2006-01-02T15:04:05\"\n)\n\nfunc TestAddGigasecond(t *testing.T) {\n\tfor _, tc := range addCases {\n\t\tin := parse(tc.in, t)\n\t\twant := parse(tc.want, t)\n\t\tgot := AddGigasecond(in)\n\t\tif !got.Equal(want) {\n\t\t\tt.Fatalf(`FAIL: %s\nAddGigasecond(%s)\n   = %s\nwant %s`, tc.description, in, got, want)\n\t\t}\n\t\tt.Log(\"PASS:\", tc.description)\n\t}\n\tt.Log(\"Tested\", len(addCases), \"cases.\")\n}\n\nfunc parse(s string, t *testing.T) time.Time {\n\ttt, err := time.Parse(fmtDT, s) // try full date time format first\n\tif err != nil {\n\t\ttt, err = time.Parse(fmtD, s) // also allow just date\n\t}\n\tif err != nil {\n\t\t// can't run tests if input won't parse.  if this seems to be a\n\t\t// development or ci environment, raise an error.  if this condition\n\t\t// makes it to the solver though, ask for a bug report.\n\t\t_, statErr := os.Stat(\"example_gen.go\")\n\t\tif statErr == nil || os.Getenv(\"TRAVIS_GO_VERSION\") > \"\" {\n\t\t\tt.Fatal(err)\n\t\t} else {\n\t\t\tt.Log(err)\n\t\t\tt.Skip(\"(This is not your fault, and is unexpected.  \" +\n\t\t\t\t\"Please file an issue at https://github.com/exercism/go.)\")\n\t\t}\n\t}\n\treturn tt\n}\n\nfunc BenchmarkAddGigasecond(b *testing.B) {\n\tfor i := 0; i < b.N; i++ {\n\t\tAddGigasecond(time.Time{})\n\t}\n}\n"
-        },
-        "fresh": false
-    }]
+========================= BEGIN DumpRequest =========================
+GET /v1/solutions/latest?exercise_id=hello-world&track_id=go HTTP/1.1
+Host: api.exercism.io
+Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Content-Type: application/json
+User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
+
+
+========================= END DumpRequest =========================
+
+
+========================= BEGIN DumpResponse =========================
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+Cache-Control: max-age=0, private, must-revalidate
+Connection: keep-alive
+Content-Type: application/json; charset=utf-8
+Date: Sun, 26 Aug 2018 01:18:58 GMT
+Etag: W/"1df219e0ab0e9451c6a7e865beee24d4"
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx/1.10.3 (Ubuntu)
+Set-Cookie: site_context=normal; domain=.exercism.io; path=/
+Set-Cookie: _exercism_session=Rw9Px8WcBbOHbaSYFGeBGVvZVFHoXrgY2P3fSePB%2BBrhpNE46nzGREyYSY9nbQdq6WdlNdaDWvdlt8W5Qpm45KAc7%2BGMEux1aUTm%2BBNVmb%2B4OcpTzAjPOiTAbd%2BerIgj561MmWhe8uekK1f1v4g5KdT5Ww2Q%2FTZs2nxYfkKLrAq%2BeMPWrgDTMiwoUnWC%2FuwmsXFqpuZqRZnJ%2BZKCKjLxJ4RTRBTw3BONdwT9n91%2B32W%2F8hcBVbvXp%2F0qUYilDFZThlpG--ysKJgbvbbLaJWCUW--3uFmFaSCgL3we4YtaTumkA%3D%3D; domain=.exercism.io; path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Request-Id: c0e32dbe-ed4e-427c-aedb-edb73e5cfbcf
+X-Runtime: 0.102885
+X-Xss-Protection: 1; mode=block
+
+
+========================= END DumpResponse =========================
+
+
+========================= BEGIN DumpRequest =========================
+GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/README.md HTTP/1.1
+Host: api.exercism.io
+Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Content-Type: application/json
+User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
+
+
+========================= END DumpRequest =========================
+
+
+========================= BEGIN DumpResponse =========================
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+Cache-Control: max-age=0, private, must-revalidate
+Connection: keep-alive
+Content-Type: text/plain; charset=utf-8
+Date: Sun, 26 Aug 2018 01:19:01 GMT
+Etag: W/"ae1a1e98b459fe4d3d93c946a66e8191"
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx/1.10.3 (Ubuntu)
+Set-Cookie: site_context=normal; domain=.exercism.io; path=/
+Set-Cookie: _exercism_session=5PRkw2x%2B3rYtGrE7iePj2kPivNG2Wb8M8ePQzsAAeyadjrFnGs5UCBwu2%2Bbf13R9h2MlOefcOvK2h3BFeIH45qy4AbIcH91Rk5%2B1euzX6Gk9v49j6YAdVpOa68eFNkwE1fd75G0wdpgPZV9Awb9LDFbHy0sNXFxpWAB3lDwvwv9ZiUGW7GDP4hwLyzfhGcvv0fFZIKEqo%2BiSYFkod47QoVQz0KdA5sYkEruXIMsD4OZvpiUaUVv6TB06BVTT%2B3OWTgVOCQ%3D%3D--5t1ThDXrssPwwCv9--Tw2Z%2Ba0M9IwISttJ%2FyZ99g%3D%3D; domain=.exercism.io; path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Request-Id: 14f78d42-b2b9-420a-85a2-8ca48176949a
+X-Runtime: 0.086310
+X-Xss-Protection: 1; mode=block
+
+
+========================= END DumpResponse =========================
+
+
+========================= BEGIN DumpRequest =========================
+GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/hello_test.go HTTP/1.1
+Host: api.exercism.io
+Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Content-Type: application/json
+User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
+
+
+========================= END DumpRequest =========================
+
+
+========================= BEGIN DumpResponse =========================
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+Cache-Control: max-age=0, private, must-revalidate
+Connection: keep-alive
+Content-Type: text/plain; charset=utf-8
+Date: Sun, 26 Aug 2018 01:19:02 GMT
+Etag: W/"81048abeb1cfcaed36184208bbfc335c"
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx/1.10.3 (Ubuntu)
+Set-Cookie: site_context=normal; domain=.exercism.io; path=/
+Set-Cookie: _exercism_session=3RDgflzyN2XpyIDoOjNeCdo0%2B%2FFP1WUrHmZHy%2BZy%2Bw9OJZ2cT5n%2FDfZNqNeG%2FTAjWYNZlYH7dsXjBwXA3jfb0Sr6povyphO8VIzSHIGqThhv%2Fm5K67N%2B1CDlzb%2BlgB6M%2BUPUsySibMfK8n4dl7ch0SvRIUbfvCrP%2FHMFvn7rUKFlEJNM0FT2zopk3HS9wXnU7xtII1JKwNMCLuLTNlIkwqBPFg67rNMsMj0LlPzpNFtdQ4W%2FM7VhcuTaHQXAN6m8m7IovXQhDy4%3D--4ZYYafLXXLhkByt6--FIkEkJpfKUk4I6rapQeOTA%3D%3D; domain=.exercism.io; path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Request-Id: ee75de9d-62d0-4fe1-9df0-6cb2f4b22df6
+X-Runtime: 0.075053
+X-Xss-Protection: 1; mode=block
+
+
+========================= END DumpResponse =========================
+
+
+========================= BEGIN DumpRequest =========================
+GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/hello_world.go HTTP/1.1
+Host: api.exercism.io
+Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Content-Type: application/json
+User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
+
+
+========================= END DumpRequest =========================
+
+
+========================= BEGIN DumpResponse =========================
+HTTP/1.1 200 OK
+Transfer-Encoding: chunked
+Cache-Control: max-age=0, private, must-revalidate
+Connection: keep-alive
+Content-Type: text/plain; charset=utf-8
+Date: Sun, 26 Aug 2018 01:19:02 GMT
+Etag: W/"978a6c3cb23cbdd03fece068ffcddbe8"
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx/1.10.3 (Ubuntu)
+Set-Cookie: site_context=normal; domain=.exercism.io; path=/
+Set-Cookie: _exercism_session=CWjoWFEEYrHIAn3DWVbKhYUMtNRohSgu18%2Fm9umUDT4SfHfV04OThb1uqsNgI4lE2wBeWybp8HXCT19vAhx58YQK6MppJ2YDk83Pf35vTMOBWZgpvpk3qfqR3Meka1AH1L%2BlJQBKILdf3iZ0nbVU%2FLRz1%2F3BY7SqQd9DXGzQteKYeFVMJyzVv5i%2BlWJxKhyIYJzUUovt2CVNtH0sZWocMg6LqV%2B4gU%2BEl6Vy1PLKtU%2FGteowFhQe0IS2%2FY8AlKjpt%2BTYIW6ndlvg--0CcB6sQdIPFEBg%2BI--L6iAKSb1D7tM5sj%2BFJicOQ%3D%3D; domain=.exercism.io; path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Request-Id: 9eae9a62-f7ed-4147-9a65-6b42f8b4bbb7
+X-Runtime: 0.077996
+X-Xss-Protection: 1; mode=block
+
+
+========================= END DumpResponse =========================
+
+```
+and now there is a new directory "C:\Users\...\Exercism\go\hello-world" holding four files.
+
+It seems the v3 site has moved from a single request/response for all exercise files (see README-old-v2) 
+to a separate request per file, and also the API key has moved from the query string to a header. 
+
+So try in Pharo Playground...
+```
+apiKey:=YOUR_TOKEN.
+exerciseId:='hello-world'.
+trackId:='go'.
+ZnClient new 
+  http;
+  host: 'api.exercism.io';
+  path: '/v1/solutions/latest';
+  headerAt: 'Authorization' put: 'Bearer ' , apiKey;
+  queryAt: 'exercise_id' put: exerciseId;
+  queryAt: 'track_id' put: trackId;
+  get.
+
+InspectIt==>
+{
+  "solution": {
+    "id": "5965748a44ee4ffdb66adce1fe17cd1e",
+    "url": "https://exercism.io/my/solutions/5965748a44ee4ffdb66adce1fe17cd1e",
+    "team": null,
+    "user": {
+      "handle": "bencoman",
+      "is_requester": true
+    },
+    "exercise": {
+      "id": "hello-world",
+      "instructions_url": "https://exercism.io/my/solutions/5965748a44ee4ffdb66adce1fe17cd1e",
+      "auto_approve": true,
+      "track": {
+        "id": "go",
+        "language": "Go"
+      }
+    },
+    "file_download_base_url": "https://api.exercism.io/v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/",
+    "files": [
+      "README.md",
+      "hello_test.go",
+      "hello_world.go"
+    ],
+    "iteration": null
+  }
 }
 ```
 
-Now there is a new directory ".../go/gigasecond" holding the four files and contents shown above,
-where "gigasecond" happens to be the first item on the list of exercises at http://exercism.io/languages/go/exercises. 
-
-A specific exercise can be downloaded by specifying the exercise slug, for example *hello-world* or *food-chain*.
-
-```
-$ exercism --verbose fetch $TRACK_ID $EXERCISE_SLUG
-$ exercism --verbose fetch go hello-world 
-```
-on the wire looks like...
-```
-Request GET http://x.exercism.io/v2/exercises/go/hello-world?key=c0dad43dc5e049319dde74842e39f004
-Response StatusCode=200
-Response Body
-{   "problems": [{
-        "id": "go/hello-world",
-        "track_id": "go",
-        "language": "go",
-        "slug": "hello-world",
-        "name": "Hello World",
-        "files": {
-            "README.md": "# Hello World\n\nThe classical introductory exercise. Just say \"Hello, World!\".\n\n[\"Hello, World!\"](http://en.wikipedia.org/wiki/%22Hello,_world!%22_program) is\nthe traditional first program for beginning programming in a new language\nor environment.\n\nThe objectives are simple:\n\n- Write a function that returns the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n## Running the tests\n\nTo run the tests run the command `go test` from within the exercise directory.\n\nIf the test suite contains benchmarks, you can run these with the `-bench`\nflag:\n\n    go test -bench .\n\nKeep in mind that each reviewer will run benchmarks on a different machine, with\ndifferent specs, so the results from these benchmark tests may vary.\n\n## Further information\n\nFor more detailed information about the Go track, including how to get help if\nyou're having trouble, please visit the exercism.io [Go language page](http://exercism.io/languages/go/about).\n\n## Source\n\nThis is an exercise to introduce users to using Exercism [http://en.wikipedia.org/wiki/%22Hello,_world!%22_program](http://en.wikipedia.org/wiki/%22Hello,_world!%22_program)\n\n## Submitting Incomplete Solutions\nIt's possible to submit an incomplete solution so you can see how others have completed the exercise.\n",
-            "hello_test.go": "package greeting\n\nimport \"testing\"\n\n// Define a function named HelloWorld that takes no arguments,\n// and returns a string.\n// In other words, define a function with the following signature:\n// HelloWorld() string\n\nfunc TestHelloWorld(t *testing.T) {\n\texpected := \"Hello, World!\"\n\tif observed := HelloWorld(); observed != expected {\n\t\tt.Fatalf(\"HelloWorld() = %v, want %v\", observed, expected)\n\t}\n}\n\n// BenchmarkHelloWorld() is a benchmarking function. These functions follow the\n// form `func BenchmarkXxx(*testing.B)` and can be used to test the performance\n// of your implementation. They may not be present in every exercise, but when\n// they are you can run them by including the `-bench` flag with the `go test`\n// command, like so: `go test -bench .`\n//\n// You will see output similar to the following:\n//\n// BenchmarkHelloWorld   \t2000000000\t         0.46 ns/op\n//\n// This means that the loop ran 2000000000 times at a speed of 0.46 ns per loop.\n//\n// While benchmarking can be useful to compare different iterations of the same\n// exercise, keep in mind that others will run the same benchmarks on different\n// machines, with different specs, so the results from these benchmark tests may\n// vary.\nfunc BenchmarkHelloWorld(b *testing.B) {\n\tfor i := 0; i < b.N; i++ {\n\t\tHelloWorld()\n\t}\n}\n",
-            "hello_world.go": "// This is a \"stub\" file.  It's a little start on your solution.\n// It's not a complete solution though; you have to write some code.\n\n// Package greeting should have a package comment that summarizes what it's about.\n// https://golang.org/doc/effective_go.html#commentary\npackage greeting\n\n// HelloWorld should have a comment documenting it.\nfunc HelloWorld() string {\n\t// Write some code here to pass the test suite.\n\t// Then remove all the stock comments.\n\t// They're here to help you get started but they only clutter a finished solution.\n\t// If you leave them in, reviewers may protest!\n\treturn \"\"\n}\n"
-        },
-        "fresh": false
-    }]
-}
-```
-Now there is a new directory ".../go/hello-world" holding the three files and contents shown above.
 
 So one approach would be using NeoJSON to parse the response body to get a Tonel file as a string,
 and parse that to create the package, classes and methods. Some discussion here...
 http://forum.world.st/Tonel-Fileout-tt5079805.html
 
 Actually I think here we dont need support for a package-per-tonel file.  The "slug" or "name" fields could provide the package name, with a tonel file per class - which presumably may provide better conformance to expectations of Execism web UI has for  other languages, than putting everything in a single file.
+
+## Testing
+In Pharo 6...
+1. Tools > Catalog Browser...  NeoJSON > Install stable version.
+1. 
