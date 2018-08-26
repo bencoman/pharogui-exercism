@@ -30,7 +30,7 @@ the output of which is...
 ========================= BEGIN DumpRequest =========================
 GET /v1/solutions/latest?exercise_id=hello-world&track_id=go HTTP/1.1
 Host: api.exercism.io
-Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
 
@@ -65,7 +65,7 @@ X-Xss-Protection: 1; mode=block
 ========================= BEGIN DumpRequest =========================
 GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/README.md HTTP/1.1
 Host: api.exercism.io
-Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
 
@@ -100,7 +100,7 @@ X-Xss-Protection: 1; mode=block
 ========================= BEGIN DumpRequest =========================
 GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/hello_test.go HTTP/1.1
 Host: api.exercism.io
-Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
 
@@ -135,7 +135,7 @@ X-Xss-Protection: 1; mode=block
 ========================= BEGIN DumpRequest =========================
 GET /v1/solutions/5965748a44ee4ffdb66adce1fe17cd1e/files/hello_world.go HTTP/1.1
 Host: api.exercism.io
-Authorization: Bearer d4a37d75-2da2-4300-9ec1-4a4770459c56
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 User-Agent: github.com/exercism/cli v3.0.8 (windows/amd64)
 
